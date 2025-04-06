@@ -17,7 +17,9 @@ export async function POST( req )
   // Optional: Lookup associated product ID (or store this mapping in your DB)
 
   // Trigger sync (dummy product ID for now)
-  await syncVariantInventoryLevels( '1234567890', '<your-shop>', '<token>' )
+  await syncVariantInventoryLevels( 'gid://shopify/Product/9566650958111', 'zetamari.myshopify.com', process.env.SHOPIFY_ADMIN_API_ACCESS_TOKEN )
+
+  console.log( '----- synced -----' )
 
   return new NextResponse( 'OK' )
 }

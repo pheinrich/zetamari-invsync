@@ -1,6 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { verifyShopifyWebhook } from '@/lib/verifyWebhook'
+import { productFromInventoryItem } from '@/lib/findProduct'
 import { syncVariantInventoryLevels } from '@/lib/syncInventory'
+
+const host = 'zetamari.myshopify.com'
+const accessToken = process.env.SHOPIFY_ADMIN_API_ACCESS_TOKEN
 
 export async function POST( req )
 {
@@ -12,14 +16,16 @@ export async function POST( req )
     return new NextResponse( 'Unauthorized', {status: 401} )
 
   const data = JSON.parse( rawBody )
-  const {inventory_item_id, location_id} = data
-
-  // Optional: Lookup associated product ID (or store this mapping in your DB)
-
-  // Trigger sync (dummy product ID for now)
-  await syncVariantInventoryLevels( 'gid://shopify/Product/9566650958111', 'zetamari.myshopify.com', process.env.SHOPIFY_ADMIN_API_ACCESS_TOKEN )
-
-  console.log( '----- synced -----' )
+  console.log( `inventory_item_id = ${data.inventory_item_id}` )
+  // const productGid = await productFromInventoryItem(
+  //   `gid://shopify/InventoryItem/${data.inventory_item_id}`,
+  //   host,
+  //   accessToken
+  // )
+  // console.log( `productGid = ${productGid}` )
+  
+  // Trigger sync
+  await syncVariantInventoryLevels( 'gid://shopify/Product/9566650958111', host, accessToken )
 
   return new NextResponse( 'OK' )
 }

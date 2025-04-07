@@ -10,6 +10,6 @@ export async function GET( req )
     query: callbackParams,
   })
 
-  console.log( "Shop authenticated:", session.shop )
+  //console.log( "Shop authenticated:", session.shop )
   return NextResponse.redirect( '/success' )
 }

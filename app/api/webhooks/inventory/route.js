@@ -16,16 +16,14 @@ export async function POST( req )
     return new NextResponse( 'Unauthorized', {status: 401} )
 
   const data = JSON.parse( rawBody )
-  console.log( `inventory_item_id = ${data.inventory_item_id}` )
-  // const productGid = await productFromInventoryItem(
-  //   `gid://shopify/InventoryItem/${data.inventory_item_id}`,
-  //   host,
-  //   accessToken
-  // )
-  // console.log( `productGid = ${productGid}` )
-  
+  const productGid = await productFromInventoryItem(
+    `gid://shopify/InventoryItem/${data.inventory_item_id}`,
+    host,
+    accessToken
+  )
+
   // Trigger sync
-  await syncVariantInventoryLevels( 'gid://shopify/Product/9566650958111', host, accessToken )
+  await syncVariantInventoryLevels( productGid, host, accessToken )
 
   return new NextResponse( 'OK' )
 }

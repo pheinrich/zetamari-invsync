@@ -1,36 +1,7 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+This implements a tiny Shopify webhook to synchronize inventory item quantities across variants for Zetamari classes.
 
-## Getting Started
+Classes have limited capacity, so students must reserve their space. For convenience, they may either pay in full or pay a 50% deposit, with the balance due on the first class day. Class availability reflects the number of paid students, whether they pay the full amount or the deposit.
 
-First, run the development server:
+Unfortunately, Shopify has no built-in facility for deposit payments, although many commercial apps with this functionality may be purchased (on a subscription basis) in the Shopify app store. As a free work-around, many use multiple variants (e.g. 'pay in full' and 'deposit only'). This approach has the significant drawback, though, that separate inventory levels are maintained for each variant. They must be synced manually to ensure against double-booking each class seat.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
-
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+In an effort to avoid yet another $10/month subscription for what I consider very basic functionality, this is my home-grown solution. It is registered as a webhook on the Zetamari Shopify website, responding to changes to inventory levels. For each product whose "Sync Variant Inventory Quantities" metafield is true, reducing inventory for any variant will adjust all other variant inventory levels to match. This happens in response to both customer purchases and admin updates.
